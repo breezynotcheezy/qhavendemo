@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kyber Encryption Demo</title>
+</head>
+<body>
+  <h1>CRYSTALS Kyber File Encryption</h1>
+  
+  <!-- Input for uploading a file -->
+  <input type="file" id="fileInput" />
+  <button id="encryptBtn">Encrypt File</button>
+  
+  <!-- Placeholder for encrypted file download -->
+  <a id="downloadLink" style="display: none;">Download Encrypted File</a>
+
+  <script src="https://cdn.jsdelivr.net/npm/@openpgp/js-keygen@0.0.1/dist/index.js"></script>
+  <script>
+    document.getElementById('encryptBtn').addEventListener('click', async function() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("Please select a file first!");
+        return;
+      }
+
+      // Convert file to an ArrayBuffer for encryption
+      const arrayBuffer = await file.arrayBuffer();
+
+      // Simple mock encryption (replace this with actual Kyber encryption)
+      const encryptedData = new Uint8Array(arrayBuffer.byteLength);
+      for (let i = 0; i < arrayBuffer.byteLength; i++) {
+        encryptedData[i] = arrayBuffer[i] ^ 0xFF;  // Inverting bits for demo purposes
+      }
+
+      // Create a Blob for the encrypted data and create a download link
+      const blob = new Blob([encryptedData], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+      const downloadLink = document.getElementById('downloadLink');
+      downloadLink.href = url;
+      downloadLink.download = 'encrypted-file.bin';
+      downloadLink.style.display = 'block';
+      downloadLink.textContent = 'Download Encrypted File';
+    });
+  </script>
+</body>
+</html>
